@@ -1,12 +1,15 @@
 import os
-from openai import OpenAI
+from dotenv import load_dotenv
+load_dotenv()
+from google import genai
+from google.genai import types
 from client import CodeReviewEnv, CodeReviewAction
 
-API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
-MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-3.5-turbo")
-HF_TOKEN = os.environ.get("HF_TOKEN", "")
+MODEL_NAME = os.environ.get("MODEL_NAME", "gemini-1.5-pro")
+# We lookup GEMINI_API_KEY or fallback to GEMINI since it's commonly used
+API_KEY = os.environ.get("GEMINI_API_KEY", os.environ.get("GEMINI", ""))
 
-client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
+client = genai.Client(api_key=API_KEY)
 
 SYSTEM_PROMPT = """
 You are a code reviewer. You will see a unified diff.
@@ -27,16 +30,19 @@ for task_id in TASKS:
     done = False
     result = None
     while not done:
-        completion = client.chat.completions.create(
-            model=MODEL_NAME,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": obs.to_prompt()}
-            ],
-            max_tokens=100,
-            temperature=0.0,
-        )
-        raw = completion.choices[0].message.content or "noop()"
+        try:
+            response = client.models.generate_content(
+                model=MODEL_NAME,
+                contents=obs.to_prompt(),
+                config=types.GenerateContentConfig(
+                    system_instruction=SYSTEM_PROMPT,
+                    max_output_tokens=100,
+                    temperature=0.0,
+                )
+            )
+            raw = response.text
+        except Exception:
+            raw = "noop()"
         action = CodeReviewAction.from_text(raw)
         result = env.step(action)
         obs, done = result.observation, result.done

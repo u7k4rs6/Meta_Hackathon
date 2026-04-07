@@ -5,3 +5,6 @@ __pycache__/
 output.txt
 output3.txt
 .DS_Store
+
+venv/
+*.log
