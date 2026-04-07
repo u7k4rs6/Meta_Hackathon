@@ -14,7 +14,11 @@ dependencies = [
     "pydantic",
     "openai",
     "python-multipart",
+    "openenv-core>=0.2.0",
 ]
+
+[project.scripts]
+server = "server.app:main"
 
 [project.optional-dependencies]
 dev = ["httpx", "pytest"]
