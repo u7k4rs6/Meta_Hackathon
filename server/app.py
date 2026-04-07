@@ -14,10 +14,10 @@ os.makedirs("ui", exist_ok=True)
 app.mount("/ui", StaticFiles(directory="ui"), name="ui")
 
 class ResetRequest(BaseModel):
-    task_id: str
+    task_id: str = "task1_easy"
 
 @app.post("/reset", response_model=Observation)
-def reset(request: ResetRequest):
+def reset(request: ResetRequest = ResetRequest()):
     try:
         obs = env.reset(request.task_id)
         return obs
