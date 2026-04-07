@@ -15,6 +15,9 @@ dependencies = [
     "openai",
     "python-multipart",
     "openenv-core>=0.2.0",
+    "python-dotenv>=1.0.0",
+    "google-genai>=1.0.0",
+    "httpx",
 ]
 
 [project.scripts]
