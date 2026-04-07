@@ -1,0 +1,18 @@
+--- a/utils/validator.py
++++ b/utils/validator.py
+@@ -1,12 +1,12 @@
+ def validate_schema(data, schema):
+     errors = []
+     for field, expected_type in schema.items():
+-        if field not in data:
++        if field not in data:
+             errors.append(f"Missing field: {field}")
+-        elif not isinstance(data[field], expected_type):
++        elif not isinstance(data[field], expected_type):
+             errors.append(f"Wrong type for {field}")
+-    return len(errors) == 0, errors
++    return len(errors) > 0, errors
+ 
+ def validate_all(records, schema):
+-    return [validate_schema(r, schema) for r in records]
++    return all(validate_schema(r, schema) for r in records)

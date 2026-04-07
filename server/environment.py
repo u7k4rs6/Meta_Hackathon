@@ -1,12 +1,14 @@
 from server.models import Action, Observation, Reward, State
 from server.tasks.task1 import Task1Easy
 from server.tasks.task2 import Task2Medium
+from server.tasks.task3 import Task3Hard
 
 class Environment:
     def __init__(self):
         self.tasks = {
             "task1_easy": Task1Easy(),
-            "task2_medium": Task2Medium()
+            "task2_medium": Task2Medium(),
+            "task3_hard": Task3Hard(),
         }
         self.current_task = None
         self.history = []

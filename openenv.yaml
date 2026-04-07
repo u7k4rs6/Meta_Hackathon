@@ -5,7 +5,10 @@ entrypoint: server/app.py
 tasks:
   - id: task1_easy
     difficulty: easy
-    description: "Spot the bug in a single-file diff"
+    description: "Spot the off-by-one bug in a single-file diff"
   - id: task2_medium
     difficulty: medium
-    description: "Suggest the correct fix for a pre-flagged bug"
+    description: "Suggest the correct fix for a pre-flagged null-deref bug"
+  - id: task3_hard
+    difficulty: hard
+    description: "Identify a wrong-operator bug in a validator utility diff"
