@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Review Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ui/style.css">
+</head>
+<body>
+    <div id="app">
+        <header class="top-bar">
+            <div class="left">
+                <h1>CodeReview Environment</h1>
+                <span id="task-badge" class="badge">No Task</span>
+            </div>
+            <div class="center">
+                <h2>Goal: <span id="goal-text">-</span></h2>
+            </div>
+            <div class="right">
+                <span class="step-indicator">Step <span id="step-count">0</span>/5</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="diff-panel">
+                <div class="panel-header">
+                    <h3>Unified Diff</h3>
+                </div>
+                <div class="diff-container" id="diff-container">
+                    <table class="diff-table" id="diff-table">
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="action-panel">
+                <div class="panel-section">
+                    <h3>Environment Controls</h3>
+                    <div class="form-group row">
+                        <select id="task-select">
+                            <option value="task1_easy">Task 1 (Easy)</option>
+                            <option value="task2_medium">Task 2 (Medium)</option>
+                        </select>
+                        <button id="btn-reset" class="btn primary">Reset Environment</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3>State</h3>
+                    <div class="state-info">
+                        <p>Score: <span id="score-text" class="score">0.0</span></p>
+                        <p>Done: <span id="done-text">False</span></p>
+                        <p>Feedback: <span id="feedback-text">-</span></p>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3>Take Action</h3>
+                    
+                    <div id="task1-controls" class="action-group">
+                        <h4>Flag Bug</h4>
+                        <p class="help-text">Click a line in the diff, then select the bug type.</p>
+                        <div class="form-group">
+                            <label>Selected Line:</label>
+                            <input type="text" id="selected-line" readonly placeholder="None" />
+                        </div>
+                        <div class="form-group">
+                            <label>Bug Type:</label>
+                            <select id="bug-type">
+                                <option value="off-by-one">off-by-one</option>
+                                <option value="null-deref">null-deref</option>
+                                <option value="wrong-operator">wrong-operator</option>
+                                <option value="missing-return">missing-return</option>
+                            </select>
+                        </div>
+                        <button id="btn-flag" class="btn block">Flag Bug (click_line)</button>
+                    </div>
+
+                    <div id="task2-controls" class="action-group" style="display: none;">
+                        <h4>Suggest Fix</h4>
+                        <p class="help-text">Provide a replacement code for the flagged line.</p>
+                        <div class="form-group">
+                            <label>Flagged Line:</label>
+                            <input type="text" id="flagged-line" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label>Suggested Code:</label>
+                            <textarea id="fix-code" rows="3" placeholder="enter python code..."></textarea>
+                        </div>
+                        <button id="btn-fix" class="btn block">Submit Fix (submit_fix)</button>
+                    </div>
+
+                    <div class="action-group mt-2">
+                        <button id="btn-noop" class="btn block secondary">Pass (noop)</button>
+                    </div>
+                </div>
+                
+                <div class="panel-section history-section">
+                    <h3>History</h3>
+                    <ul id="history-list" class="history-list">
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="ui/diff.js"></script>
+</body>
+</html>

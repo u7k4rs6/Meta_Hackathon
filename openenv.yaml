@@ -1,0 +1,11 @@
+name: code-review-env
+version: "1.0.0"
+description: "A code review environment where an AI agent spots bugs and suggests fixes in unified diffs"
+entrypoint: server/app.py
+tasks:
+  - id: task1_easy
+    difficulty: easy
+    description: "Spot the bug in a single-file diff"
+  - id: task2_medium
+    difficulty: medium
+    description: "Suggest the correct fix for a pre-flagged bug"

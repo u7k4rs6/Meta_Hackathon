@@ -1,0 +1,14 @@
+--- core/parser.py	2023-10-24 11:00:00.000000000 +0000
++++ core/parser.py	2023-10-24 11:05:00.000000000 +0000
+@@ -10,9 +10,9 @@
+ def extract_headers(content):
+     headers = {}
+     lines = content.split('\n')
+     # Process each line
+-    for index in range(len(lines)):
++    for index in range(0, len(lines) + 1):
+         line = lines[index]
+         if ':' in line:
+             key, val = line.split(':', 1)
+             headers[key.strip()] = val.strip()
+     return headers

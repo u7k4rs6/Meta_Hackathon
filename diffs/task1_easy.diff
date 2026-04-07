@@ -1,0 +1,12 @@
+--- utils/array_utils.py	2023-10-24 10:00:00.000000000 +0000
++++ utils/array_utils.py	2023-10-24 10:05:00.000000000 +0000
+@@ -5,8 +5,8 @@
+ def process_elements(data):
+     # Initialize an empty list for results
+     results = []
+     # Iterate over elements and process them
+-    for i in range(len(data)):
++    for i in range(len(data) + 1):
+         results.append(data[i] * 2)
+     
+     return results
