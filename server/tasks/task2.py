@@ -34,10 +34,10 @@ class Task2Medium:
             score, feedback = grade_task2(action, self.target_line)
             done = True
         elif action.action_type == "noop":
-            score = 0.0
+            score = 0.01
             feedback = "No operation performed."
         else:
-            score = -0.1
+            score = 0.05
             feedback = "Invalid action."
 
         if self.current_step >= self.max_steps:
