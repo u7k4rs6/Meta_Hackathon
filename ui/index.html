@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Code Review Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="ui/style.css">
 </head>
 <body>
@@ -47,11 +47,16 @@
                 </div>
 
                 <div class="panel-section">
-                    <h3>State</h3>
+                    <h3>Task State</h3>
                     <div class="state-info">
-                        <p>Score: <span id="score-text" class="score">0.0</span></p>
-                        <p>Done: <span id="done-text">False</span></p>
-                        <p>Feedback: <span id="feedback-text">-</span></p>
+                        <div class="score-container">
+                            <span class="score-label">Score</span>
+                            <span id="score-text" class="score">0.0</span>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:8px">
+                            <p style="font-size:12px; color:var(--text-muted)">Done: <span id="done-text" style="color:var(--text-main)">False</span></p>
+                            <p style="font-size:12px; color:var(--text-muted)">Feedback: <span id="feedback-text" style="color:var(--text-main)">-</span></p>
+                        </div>
                     </div>
                 </div>
 
