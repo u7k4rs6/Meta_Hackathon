@@ -1,3 +1,17 @@
+---
+title: MetaHackathon CodeReview Environment
+emoji: 🔍
+colorFrom: green
+colorTo: gray
+sdk: docker
+app_port: 7860
+tags:
+  - openenv
+  - code-review
+  - fastapi
+  - hackathon
+---
+
 # CodeReview OpenEnv Environment
 
 An OpenEnv-compliant environment for a Meta x PyTorch hackathon where an AI agent naviages a Code Review Dashboard web UI, reads unified diffs, and takes structured actions (flagging bugs, submitting fixes).
