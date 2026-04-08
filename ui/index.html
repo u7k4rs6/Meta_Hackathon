@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Code Review Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="ui/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ui/style.css?v=2">
 </head>
 <body>
     <div id="app">
@@ -25,6 +25,10 @@
             <div class="diff-panel">
                 <div class="panel-header">
                     <h3>Unified Diff</h3>
+                    <p style="margin-top: 8px; color: var(--text-muted); font-size: 14px; max-width: 600px;">
+                        Welcome to the OpenEnv Code Review Arena! Your goal is to review the code below. 
+                        <strong>Step 1:</strong> Click on a line showing a bug. <strong>Step 2:</strong> Select the bug type on the right panel and flag it. <strong>Step 3:</strong> Provide a patched line of code to fix it.
+                    </p>
                 </div>
                 <div class="diff-container" id="diff-container">
                     <table class="diff-table" id="diff-table">
@@ -41,17 +45,23 @@
                         <select id="task-select">
                             <option value="task1_easy">Task 1 (Easy)</option>
                             <option value="task2_medium">Task 2 (Medium)</option>
+                            <option value="task3_hard">Task 3 (Hard)</option>
                         </select>
                         <button id="btn-reset" class="btn primary">Reset Environment</button>
                     </div>
                 </div>
 
                 <div class="panel-section">
-                    <h3>State</h3>
+                    <h3>Task State</h3>
                     <div class="state-info">
-                        <p>Score: <span id="score-text" class="score">0.0</span></p>
-                        <p>Done: <span id="done-text">False</span></p>
-                        <p>Feedback: <span id="feedback-text">-</span></p>
+                        <div class="score-container">
+                            <span class="score-label">Score</span>
+                            <span id="score-text" class="score">0.0</span>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:8px">
+                            <p style="font-size:12px; color:var(--text-muted)">Done: <span id="done-text" style="color:var(--text-main)">False</span></p>
+                            <p style="font-size:12px; color:var(--text-muted)">Feedback: <span id="feedback-text" style="color:var(--text-main)">-</span></p>
+                        </div>
                     </div>
                 </div>
 
