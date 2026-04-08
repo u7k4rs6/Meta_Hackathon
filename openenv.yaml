@@ -1,17 +1,29 @@
+spec_version: 1
 name: code-review-env
 version: "1.0.0"
 description: "A code review environment where an AI agent spots bugs and suggests fixes in unified diffs"
+type: space
+runtime: fastapi
+app: server.app:app
+port: 7860
 entrypoint: server/app.py
+
 tasks:
   - id: task1_easy
     difficulty: easy
-    description: "Spot the bug in a single-file diff"
-    grader: server/graders/grader1.py
+    description: "Spot the off-by-one bug in a single-file diff"
+    score: 0.3
+    grader: "server.graders.grader1:grade"
+
   - id: task2_medium
     difficulty: medium
-    description: "Suggest the correct fix for a pre-flagged bug"
-    grader: server/graders/grader2.py
+    description: "Suggest the correct fix for a pre-flagged null-deref bug"
+    score: 0.3
+    grader: "server.graders.grader2:grade"
+
   - id: task3_hard
     difficulty: hard
-    description: "Identify the primary bug in a multi-bug authentication diff"
-    grader: server/graders/grader3.py
+    description: "Identify a wrong-operator bug in a validator utility diff"
+    score: 0.4
+    grader: "server.graders.grader3:grade"
+
