@@ -1,16 +1,23 @@
 import os
+from openai import OpenAI
 from dotenv import load_dotenv
-load_dotenv()
-from google import genai
-from google.genai import types
 from client import CodeReviewEnv, CodeReviewAction
 
-MODEL_NAME = os.environ.get("MODEL_NAME", "gemini-1.5-pro")
-# We lookup GEMINI_API_KEY or fallback to GEMINI since it's commonly used
-API_KEY = os.environ.get("GEMINI_API_KEY", os.environ.get("GEMINI", ""))
+# Load environment variables if .env exists
+load_dotenv()
 
-client = genai.Client(api_key=API_KEY)
+# Configuration per Hackathon Rules
+API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
+MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4.1-mini")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
+if HF_TOKEN is None:
+    raise ValueError("HF_TOKEN environment variable is required")
+
+# Initialize OpenAI Client (only SDK allowed)
+client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
+
+# System configuration for the agent
 SYSTEM_PROMPT = """
 You are a code reviewer. You will see a unified diff.
 Reply with exactly one action in this format:
@@ -21,39 +28,68 @@ Bug types: off-by-one, null-deref, wrong-operator, missing-return
 """
 
 TASKS = ["task1_easy", "task2_medium", "task3_hard"]
-scores = []
+BENCHMARK = "code-review-env"
 
-env = CodeReviewEnv(base_url=os.getenv("ENV_URL", "http://localhost:7860")).sync()
+# Initialize Environment Client
+env_url = os.getenv("ENV_URL", "http://localhost:7860")
+env_client = CodeReviewEnv(base_url=env_url).sync()
 
 for task_id in TASKS:
-    obs = env.reset(task_id=task_id)
-    done = False
-    result = None
-    while not done:
-        try:
-            response = client.models.generate_content(
-                model=MODEL_NAME,
-                contents=obs.to_prompt(),
-                config=types.GenerateContentConfig(
-                    system_instruction=SYSTEM_PROMPT,
-                    max_output_tokens=100,
-                    temperature=0.0,
-                )
-            )
-            raw = response.text
-        except Exception:
-            raw = "noop()"
-        action = CodeReviewAction.from_text(raw)
-        result = env.step(action)
-        obs, done = result.observation, result.done
+    # [START] task=<task_name> env=<benchmark> model=<model_name>
+    print(f"[START] task={task_id} env={BENCHMARK} model={MODEL_NAME}")
     
-    score = result.reward.score if result else 0.05
-    # Clamp score to be strictly within (0, 1) as required by the validator
-    score = max(0.01, min(0.99, score))
-    scores.append(score)
-    print(f"{task_id}: {score:.3f}")
-
-if scores:
-    print(f"Mean: {sum(scores)/len(scores):.3f}")
-else:
-    print("Mean: 0.000")
+    steps = 0
+    rewards = []
+    success = False
+    
+    try:
+        # Initial environment reset
+        obs = env_client.reset(task_id=task_id)
+        done = False
+        
+        while not done:
+            try:
+                # LLM Inference
+                response = client.chat.completions.create(
+                    model=MODEL_NAME,
+                    messages=[
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": obs.to_prompt()}
+                    ],
+                    max_tokens=100,
+                    temperature=0.0
+                )
+                action_text = response.choices[0].message.content.strip()
+            except Exception:
+                # Default to noop on LLM failure
+                action_text = "noop()"
+            
+            # Action parsing and stepping
+            action = CodeReviewAction.from_text(action_text)
+            result = env_client.step(action)
+            steps += 1
+            
+            # Extract metrics
+            reward = result.reward.score
+            rewards.append(f"{reward:.2f}")
+            done = result.done
+            
+            # Success is defined as task completion with a positive score
+            if done and reward > 0.5:
+                success = True
+                
+            # [STEP] step=<n> action=<action_str> reward=<0.00> done=<true|false> error=null
+            print(f"[STEP] step={steps} action={action_text} reward={reward:.2f} done={str(done).lower()} error=null")
+            
+            # Update observation for next step
+            obs = result.observation
+            
+    except Exception as e:
+        # Catch unexpected errors to ensure [END] is still printed
+        # Any step that crashes would have error=<msg> if we were mid-step
+        pass
+    finally:
+        # [END] success=<true|false> steps=<n> rewards=<r1,r2,...,rn>
+        success_str = str(success).lower()
+        rewards_str = ",".join(rewards)
+        print(f"[END] success={success_str} steps={steps} rewards={rewards_str}")
