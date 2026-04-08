@@ -8,9 +8,15 @@ def grade_task1(action, target_line, target_bug_type):
 
 
 def grade(action_data: dict) -> float:
-    """Wrapper for app.py to expose 'grade' with dict signature."""
+    """Standardized grader interface for the platform.
+    Returns a score strictly within the (0.01, 0.99) range.
+    """
     from server.models import Action
-    action = Action(**action_data)
-    # Task 1 targets: line 9, bug "off-by-one"
-    score, _ = grade_task1(action, 9, "off-by-one")
-    return float(score)
+    try:
+        action = Action(**action_data)
+        # Task 1 targets: line 9, bug "off-by-one"
+        score, _ = grade_task1(action, 9, "off-by-one")
+        # Global clamping safety net
+        return max(0.01, min(0.99, float(score)))
+    except Exception:
+        return 0.05

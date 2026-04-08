@@ -66,8 +66,14 @@ def grade_task3(action):
 
 
 def grade(action_data: dict) -> float:
-    """Wrapper for app.py to expose 'grade' with dict signature."""
+    """Standardized grader interface for the platform.
+    Returns a score strictly within the (0.01, 0.99) range.
+    """
     from server.models import Action
-    action = Action(**action_data)
-    score, _ = grade_task3(action)
-    return float(score)
+    try:
+        action = Action(**action_data)
+        score, _ = grade_task3(action)
+        # Global clamping safety net
+        return max(0.01, min(0.99, float(score)))
+    except Exception:
+        return 0.05
