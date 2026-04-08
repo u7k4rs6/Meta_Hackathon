@@ -63,3 +63,11 @@ def grade_task3(action):
 
     # noop or unknown
     return 0.05, "No meaningful action taken."
+
+
+def grade(action_data: dict) -> float:
+    """Wrapper for app.py to expose 'grade' with dict signature."""
+    from server.models import Action
+    action = Action(**action_data)
+    score, _ = grade_task3(action)
+    return float(score)

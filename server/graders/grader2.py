@@ -23,3 +23,12 @@ def grade_task2(action, target_line):
         return 0.3, "Syntactically valid Python, but not the correct fix."
     except SyntaxError:
         return 0.05, "Invalid Python syntax."
+
+
+def grade(action_data: dict) -> float:
+    """Wrapper for app.py to expose 'grade' with dict signature."""
+    from server.models import Action
+    action = Action(**action_data)
+    # Task 2 targets: line 14
+    score, _ = grade_task2(action, 14)
+    return float(score)
