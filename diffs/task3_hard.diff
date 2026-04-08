@@ -1,0 +1,14 @@
+--- services/auth_service.py	2023-10-24 12:00:00.000000000 +0000
++++ services/auth_service.py	2023-10-24 12:05:00.000000000 +0000
+@@ -8,11 +8,11 @@
+ def authenticate_user(username, password, user_db):
+     if username not in user_db:
+         return None
+-    stored_hash = user_db[username]["password_hash"]
++    stored_hash = user_db[username]["password"]
+     if check_password(password, stored_hash):
+         token = generate_token(username)
+-        return {"token": token, "expires_in": 3600}
+-    return None
++        return {"token": token, "expires_in": -1}
++    return {"token": "", "expires_in": 0}

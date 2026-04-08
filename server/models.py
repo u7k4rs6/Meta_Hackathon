@@ -1,11 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional, List
+
 
 class Action(BaseModel):
     action_type: str
     line_number: Optional[int] = None
     bug_type: Optional[str] = None
     fix_code: Optional[str] = None
+
 
 class Observation(BaseModel):
     task_id: str
@@ -20,9 +22,28 @@ class Observation(BaseModel):
             prompt += f"\nNote: A bug was found on line {self.flagged_line}. Please provide a fix.\n"
         return prompt
 
+
 class Reward(BaseModel):
     score: float
     feedback: str
+
+    @field_validator("score")
+    @classmethod
+    def clamp_score(cls, v: float) -> float:
+        """Ensure score is ALWAYS strictly between 0 and 1 (exclusive).
+        This is the ultimate safety net — no matter what any grader returns,
+        the score will never be exactly 0.0 or 1.0."""
+        # Clamp to strict boundaries first
+        clamped = max(0.01, min(0.99, float(v)))
+        # Round to 4 decimal places to prevent float weirdness
+        clamped = round(clamped, 4)
+        # Final absolute safety check after rounding
+        if clamped <= 0.0:
+            clamped = 0.01
+        if clamped >= 1.0:
+            clamped = 0.99
+        return clamped
+
 
 class State(BaseModel):
     task_id: str

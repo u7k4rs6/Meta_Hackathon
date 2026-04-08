@@ -20,7 +20,7 @@ Reply with exactly one action in this format:
 Bug types: off-by-one, null-deref, wrong-operator, missing-return
 """
 
-TASKS = ["task1_easy", "task2_medium"]
+TASKS = ["task1_easy", "task2_medium", "task3_hard"]
 scores = []
 
 env = CodeReviewEnv(base_url=os.getenv("ENV_URL", "http://localhost:7860")).sync()
@@ -47,7 +47,9 @@ for task_id in TASKS:
         result = env.step(action)
         obs, done = result.observation, result.done
     
-    score = result.reward.score if result else 0.0
+    score = result.reward.score if result else 0.05
+    # Clamp score to be strictly within (0, 1) as required by the validator
+    score = max(0.01, min(0.99, score))
     scores.append(score)
     print(f"{task_id}: {score:.3f}")
 
