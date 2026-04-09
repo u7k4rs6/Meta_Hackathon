@@ -6,8 +6,12 @@ class Task1Easy:
     def __init__(self):
         self.task_id = "task1_easy"
         self.goal = "Find the off-by-one bug by reporting the line number and bug type."
-        with open(os.path.join("diffs", "task1_easy.diff"), "r") as f:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(os.path.dirname(current_dir))
+        diff_path = os.path.join(root_dir, "diffs", "task1_easy.diff")
+        with open(diff_path, "r") as f:
             self.diff_content = f.read()
+
         self.target_line = 9  # The line number in our diff snippet
         self.target_bug_type = "off-by-one"
         self.current_step = 0

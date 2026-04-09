@@ -6,8 +6,12 @@ class Task2Medium:
     def __init__(self):
         self.task_id = "task2_medium"
         self.goal = "Provide the correct fix code for the flagged line."
-        with open(os.path.join("diffs", "task2_medium.diff"), "r") as f:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(os.path.dirname(current_dir))
+        diff_path = os.path.join(root_dir, "diffs", "task2_medium.diff")
+        with open(diff_path, "r") as f:
             self.diff_content = f.read()
+
         self.target_line = 14  # Updated line number based on parser diff
         self.flagged_line = 14
         self.current_step = 0

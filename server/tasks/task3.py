@@ -11,8 +11,12 @@ class Task3Hard:
             "Identify the primary bug (wrong dictionary key causing a KeyError) "
             "by reporting the line number and bug type, or submit a fix."
         )
-        with open(os.path.join("diffs", "task3_hard.diff"), "r") as f:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.path.dirname(os.path.dirname(current_dir))
+        diff_path = os.path.join(root_dir, "diffs", "task3_hard.diff")
+        with open(diff_path, "r") as f:
             self.diff_content = f.read()
+
         self.current_step = 0
         self.max_steps = 5
 
@@ -37,11 +41,12 @@ class Task3Hard:
             score, feedback = grade_task3(action)
             done = True
         elif action.action_type == "noop":
-            score = 0.05
+            score = 0.1
             feedback = "No operation performed."
         else:
-            score = 0.05
+            score = 0.1
             feedback = "Invalid action."
+
 
         if self.current_step >= self.max_steps:
             done = True

@@ -19,8 +19,11 @@ GRADERS = {
     "task3_hard": grade3,
 }
 
-os.makedirs("ui", exist_ok=True)
-app.mount("/ui", StaticFiles(directory="ui"), name="ui")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+UI_DIR = os.path.join(BASE_DIR, "ui")
+
+os.makedirs(UI_DIR, exist_ok=True)
+app.mount("/ui", StaticFiles(directory=UI_DIR), name="ui")
 
 class ResetRequest(BaseModel):
     task_id: str = "task1_easy"
@@ -66,7 +69,8 @@ def grade(task_id: str, request: GradeRequest = GradeRequest()):
 
 @app.get("/")
 def read_root():
-    with open("ui/index.html", "r") as f:
+    index_path = os.path.join(UI_DIR, "index.html")
+    with open(index_path, "r") as f:
         return HTMLResponse(content=f.read())
 
 def main():

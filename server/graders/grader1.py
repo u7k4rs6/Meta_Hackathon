@@ -2,9 +2,9 @@ def grade_task1(action, target_line, target_bug_type):
     if action.line_number == target_line and action.bug_type == target_bug_type:
         return 0.95, "Correct line and bug type."
     elif action.line_number == target_line and action.bug_type != target_bug_type:
-        return 0.5, "Correct line, but wrong bug type."
+        return 0.65, "Correct line, but wrong bug type. (Partial Success)"
     else:
-        return 0.05, "Wrong line."
+        return 0.1, "Wrong line."
 
 
 def grade(action_data: dict) -> float:
@@ -19,4 +19,4 @@ def grade(action_data: dict) -> float:
         # Global clamping safety net
         return max(0.01, min(0.99, float(score)))
     except Exception:
-        return 0.05
+        return 0.1
