@@ -70,7 +70,7 @@ for task_id in TASKS:
             steps += 1
             
             # Extract metrics
-            reward = result.reward.score
+            reward = float(result.reward)
             rewards.append(f"{reward:.2f}")
             done = result.done
             

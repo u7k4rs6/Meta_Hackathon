@@ -5,7 +5,7 @@ from server.models import Action, Observation, Reward
 
 class StepResult(BaseModel):
     observation: Observation
-    reward: Reward
+    reward: float
     done: bool
     info: dict
 

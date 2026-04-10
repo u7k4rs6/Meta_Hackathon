@@ -4,6 +4,12 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import os
 
+import os
+import sys
+
+# Ensure the parent directory is in the path so 'from server.xxx' works
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from server.environment import Environment
 from server.models import Action, Observation, State
 from server.graders.grader1 import grade as grade1
