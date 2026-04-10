@@ -1,15 +1,16 @@
 def grade_task1(action, target_line, target_bug_type):
     if action.line_number == target_line and action.bug_type == target_bug_type:
         return float(0.95), "Correct line and bug type."
+        return float(0.85), "Correct line and bug type."
     elif action.line_number == target_line and action.bug_type != target_bug_type:
-        return float(0.65), "Correct line, but wrong bug type. (Partial Success)"
+        return float(0.50), "Correct line, but wrong bug type. (Partial Success)"
     else:
         return float(0.15), "Wrong line."
 
 
 def grade(action_data: dict) -> float:
     """Standardized grader interface for the platform.
-    Returns a score strictly within the (0.05, 0.95) range.
+    Returns a score strictly within the (0.15, 0.85) range.
     """
     from server.models import Action
     try:

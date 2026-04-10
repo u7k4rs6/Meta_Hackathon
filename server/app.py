@@ -65,7 +65,7 @@ def grade(task_id: str, request: GradeRequest = GradeRequest()):
     grader_fn = GRADERS[task_id]
     action_data = request.model_dump()
     score = grader_fn(action_data)
-    return {"task_id": task_id, "score": score}
+    return {"task_id": task_id, "score": float(score), "reward": float(score)}
 
 @app.get("/")
 def read_root():

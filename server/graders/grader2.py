@@ -15,7 +15,7 @@ def grade_task2(action, target_line):
     normalized_fix = action.fix_code.strip()
     
     if any(normalized_fix.lower() == fix.lower().strip() for fix in ACCEPTED_FIXES):
-         return float(0.95), "Correct fix."
+         return float(0.85), "Correct fix."
     
     # Check "valid python" but not in accepted fixes
     try:
@@ -27,8 +27,7 @@ def grade_task2(action, target_line):
 
 def grade(action_data: dict) -> float:
     """Standardized grader interface for the platform.
-    Returns- [x] Harden `grader1.py`: strict float enforcement and robust `grade` function
-- [x] Harden `grader2.py`: strict float enforcement and robust `grade` function
+    Returns a score strictly within the (0.15, 0.85) range.
     """
     from server.models import Action
     try:
@@ -43,8 +42,7 @@ def grade(action_data: dict) -> float:
         # Task 2 targets: line 14
         score, _ = grade_task2(action, 14)
         
-        # Global clamping safety net
-        return float(max(0.05, min(0.95, float(score))))
+        # Safe padding
+        return float(max(0.15, min(0.85, float(score))))
     except Exception:
         return float(0.15)
-

@@ -29,9 +29,9 @@ class Environment:
         
         return {
             "observation": obs,
-            "reward": reward,
+            "reward": float(reward.score),
             "done": done,
-            "info": {}
+            "info": {"feedback": reward.feedback}
         }
     
     def get_state(self):
