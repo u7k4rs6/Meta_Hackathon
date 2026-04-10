@@ -33,16 +33,16 @@ class Reward(BaseModel):
         """Ensure score is ALWAYS strictly between 0 and 1 (exclusive).
         This is the ultimate safety net — no matter what any grader returns,
         the score will never be exactly 0.0 or 1.0."""
-        # Clamp to strict boundaries first
-        clamped = max(0.01, min(0.99, float(v)))
-        # Round to 4 decimal places to prevent float weirdness
-        clamped = round(clamped, 4)
-        # Final absolute safety check after rounding
+        # Clamp to a safe range (0.05, 0.95) to stay far from boundaries
+        clamped = max(0.05, min(0.95, float(v)))
+        # Round to 3 decimal places for clean representation
+        clamped = round(clamped, 3)
+        # Final absolute safety check
         if clamped <= 0.0:
-            clamped = 0.01
+            clamped = 0.05
         if clamped >= 1.0:
-            clamped = 0.99
-        return clamped
+            clamped = 0.95
+        return float(clamped)
 
 
 class State(BaseModel):
