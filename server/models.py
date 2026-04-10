@@ -35,9 +35,7 @@ class Reward(BaseModel):
         the score will never be exactly 0.0 or 1.0."""
         # Clamp to a safe range (0.05, 0.95) to stay far from boundaries
         clamped = max(0.05, min(0.95, float(v)))
-        # Round to 3 decimal places for clean representation
-        clamped = round(clamped, 3)
-        # Final absolute safety check
+        # Final absolute safety check returning pure float without rounding
         if clamped <= 0.0:
             clamped = 0.05
         if clamped >= 1.0:
