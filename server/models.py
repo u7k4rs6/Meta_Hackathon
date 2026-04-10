@@ -34,12 +34,12 @@ class Reward(BaseModel):
         This is the ultimate safety net — no matter what any grader returns,
         the score will never be exactly 0.0 or 1.0."""
         # Clamp to a safe range (0.1, 0.9) to stay far from boundaries
-        clamped = max(0.1, min(0.9, float(v)))
+        clamped = max(0.1, min(0.89, float(v)))
         # Final absolute safety check returning pure float without rounding
         if clamped <= 0.0:
             clamped = 0.1
         if clamped >= 1.0:
-            clamped = 0.9
+            clamped = 0.89
         return float(clamped)
 
 
