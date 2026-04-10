@@ -3,12 +3,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import os
-
-import os
 import sys
 
-# Ensure the parent directory is in the path so 'from server.xxx' works
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Ensure the parent directory is in the path for absolute imports like 'from server.xxx'
+# This is critical for the platform entrypoint to resolve the 'server' package.
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 from server.environment import Environment
 from server.models import Action, Observation, State

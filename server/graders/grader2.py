@@ -7,32 +7,32 @@ ACCEPTED_FIXES = [
 
 def grade_task2(action, target_line):
     if action.line_number != target_line:
-        return float(0.15), f"Fix must be applied to line {target_line}."
+        return float(0.3), f"Fix must be applied to line {target_line}."
     
     if not action.fix_code:
-        return float(0.15), "Fix code is empty."
+        return float(0.3), "Fix code is empty."
     
     normalized_fix = action.fix_code.strip()
     
     if any(normalized_fix.lower() == fix.lower().strip() for fix in ACCEPTED_FIXES):
-         return float(0.85), "Correct fix."
+         return float(0.7), "Correct fix."
     
     # Check "valid python" but not in accepted fixes
     try:
         compile(normalized_fix, "<string>", "exec")
-        return float(0.65), "Syntactically valid Python, but not the correct fix. (Partial Success)"
+        return float(0.5), "Syntactically valid Python, but not the correct fix. (Partial Success)"
     except SyntaxError:
-        return float(0.15), "Invalid Python syntax."
+        return float(0.3), "Invalid Python syntax."
 
 
 def grade(action_data: dict) -> float:
     """Standardized grader interface for the platform.
-    Returns a score strictly within the (0.15, 0.85) range.
+    Returns a score strictly within the (0.1, 0.9) range.
     """
     from server.models import Action
     try:
         if not action_data:
-            return float(0.15)
+            return float(0.3)
             
         # Merge defaults to handle partial dicts
         defaults = {"action_type": "noop", "line_number": None, "bug_type": None, "fix_code": None}
@@ -43,6 +43,6 @@ def grade(action_data: dict) -> float:
         score, _ = grade_task2(action, 14)
         
         # Safe padding
-        return float(max(0.15, min(0.85, float(score))))
+        return float(max(0.1, min(0.9, float(score))))
     except Exception:
-        return float(0.15)
+        return float(0.3)
