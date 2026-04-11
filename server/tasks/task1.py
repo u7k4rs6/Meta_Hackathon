@@ -37,10 +37,10 @@ class Task1Easy:
             score, feedback = grade_task1(action, self.target_line, self.target_bug_type)
             done = True
         elif action.action_type == "noop":
-            score = float(0.15)
+            score = float(0.2)
             feedback = "No operation performed."
         else:
-            score = float(0.15)
+            score = float(0.2)
             feedback = "Invalid action."
 
         if self.current_step >= self.max_steps:

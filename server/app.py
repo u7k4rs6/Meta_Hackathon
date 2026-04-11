@@ -26,6 +26,13 @@ GRADERS = {
     "task3_hard": grade3,
 }
 
+
+def _strict_clamp(value: float) -> float:
+    """Terminal safety net: ensure score is strictly within (0, 1).
+    Never returns 0.0 or 1.0 regardless of what upstream code does.
+    """
+    return float(max(0.01, min(0.99, float(value))))
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UI_DIR = os.path.join(BASE_DIR, "ui")
 
@@ -71,8 +78,9 @@ def grade(task_id: str, request: GradeRequest = GradeRequest()):
         raise HTTPException(status_code=404, detail=f"Unknown task: {task_id}")
     grader_fn = GRADERS[task_id]
     action_data = request.model_dump()
-    score = grader_fn(action_data)
-    return {"task_id": task_id, "score": float(score), "reward": float(score)}
+    raw_score = grader_fn(action_data)
+    safe_score = _strict_clamp(raw_score)
+    return {"task_id": task_id, "score": safe_score, "reward": safe_score}
 
 @app.get("/")
 def read_root():
